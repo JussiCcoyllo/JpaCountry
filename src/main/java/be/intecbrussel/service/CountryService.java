@@ -40,6 +40,30 @@ public class CountryService {
         }
         em.close();
     }
+    public void updateCountry(Country country) {
+        EntityManager em = EntityManagerProvider.getEntityManager();
+
+        String countryName = country.getName();
+        Optional<Country> dbOptionalCountry = countryRepository.readCountry(em, countryName);
+
+        if (dbOptionalCountry.isEmpty()) {
+            em.close();
+            return;
+        }
+
+        Country dbCountry = dbOptionalCountry.get(); // This object is in the PC
+        dbCountry.updateWith(country);
+
+        countryRepository.createCountry(em, dbCountry);
+
+        em.close();
+    }
+
+    public void updateCountryButEasier(Country country){
+        EntityManager em = EntityManagerProvider.getEntityManager();
+        countryRepository.updateCountry(em, country);
+        em.close();
+    }
 }
 
 

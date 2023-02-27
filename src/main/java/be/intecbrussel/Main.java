@@ -2,6 +2,7 @@ package be.intecbrussel;
 
 
 import be.intecbrussel.model.Country;
+import be.intecbrussel.model.President;
 import be.intecbrussel.service.CountryService;
 
 import java.util.Optional;
