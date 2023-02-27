@@ -6,14 +6,19 @@ import be.intecbrussel.model.President;
 import be.intecbrussel.service.CountryService;
 
 import java.util.Optional;
-import java.util.zip.CheckedOutputStream;
+
 
 public class Main {
     public static void main(String[] args) {
-        //Creatr countries
-        Country belgium = new Country("Belgium", 11000000);
-        Country france = new Country("France", 60000000);
-        Country peru = new Country("Peru", 33000000);
+        //Create presidents
+        President albert = new President("Albert", 80);
+        President macron = new President("Macron", 60);
+        President dina = new President("Dina Boluarte", 59);
+
+        //Create countries
+        Country belgium = new Country("Belgium", 11000000, albert);
+        Country france = new Country("France", 60000000, macron);
+        Country peru = new Country("Peru", 33000000, dina);
 
         //Service handless the logic
         CountryService cs = new CountryService();
@@ -23,15 +28,24 @@ public class Main {
         cs.createCountry(france);
         cs.createCountry(peru);
 
-        //Read countries from DB
-        Optional<Country> dbCountry = cs.readCountry("belgium");
+        // Read countries from database
+        Optional<Country> dbCountry = cs.readCountry("Peru");
         if (dbCountry.isPresent()) {
-            System.out.println(dbCountry);
+            System.out.println(dbCountry.get());
         } else {
             System.out.println("No country found!");
         }
 
-        //Delete country from DB
+        // Delete country from database
         cs.deleteCountry("France");
+
+        // Update a country
+        Optional<Country> countryToUpdate = cs.readCountry("Belgium");
+        if (countryToUpdate.isPresent()) {
+            Country foundCountry = countryToUpdate.get();
+            foundCountry.setPopulation(foundCountry.getPopulation()+1);
+            foundCountry.getPresident().setAge(99);
+            cs.updateCountryButEasier(foundCountry);
+        }
     }
 }
